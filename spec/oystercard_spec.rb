@@ -92,6 +92,13 @@ describe Oystercard do
 
     describe "#touch_out" do
       it { is_expected.to respond_to(:touch_out).with(0).argument }
+      
+      it 'changes entry station to nil' do
+        subject.top_up(2)
+        allow(station).to receive(:name) { "Aldgate East" }
+        subject.touch_in(station.name)
+        expect { subject.touch_out }.to change{ subject.entry_station}.to nil
+      end
 
       it 'changes in_journey to false' do
         subject.top_up(2)
