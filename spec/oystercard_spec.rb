@@ -1,6 +1,7 @@
 require 'oystercard'
 
 describe Oystercard do
+    let(:station) {double("fake station")}
 
     it "has a balance of 0 by default" do
         expect(subject.balance).to eq 0
@@ -43,25 +44,33 @@ describe Oystercard do
     end
 
     describe "#touch_in" do
-        it { is_expected.to respond_to(:touch_in).with(0).argument }
+        before(:example) do
+            subject.top_up(2)
+            allow(station).to receive(:name) { "Aldgate East" }
+        end
+        
+        it { is_expected.to respond_to(:touch_in).with(1).argument }
+        
+        it 'updates an Oystercard to remember the entry station' do
+            expect { subject.touch_in(station.name) }.to change{ subject.entry_station }.to station.name 
+        end
 
         it 'changes in_journey to true' do
-            subject.top_up(2)
-            expect(subject.touch_in).to be true
+            expect(subject.touch_in(station.name)).to be true
         end
 
         it "can touch in" do
-            subject.top_up(2)
-            subject.touch_in
+            subject.touch_in(station.name)
             expect(subject).to be_in_journey
         end
-
-        it 'requires minimum balance for a journey' do
-            expect{ subject.touch_in }.to raise_error "Balance not high enough for journey"
-        end
-
     end
 
+    describe "#touch_in" do
+        it 'requires minimum balance for a journey' do
+            expect{ subject.touch_in(station) }.to raise_error "Balance not high enough for journey"
+        end
+    end
+    
     describe "#in_journey?" do
       it { is_expected.to respond_to(:in_journey?).with(0).argument }
 
@@ -71,7 +80,7 @@ describe Oystercard do
 
       it 'returns true when the user has touched in' do
         subject.top_up(2)
-        subject.touch_in
+        subject.touch_in(station)
         expect(subject.in_journey?).to be true
       end
 
@@ -86,14 +95,21 @@ describe Oystercard do
 
       it 'changes in_journey to false' do
         subject.top_up(2)
-        subject.touch_in
+        subject.touch_in(station)
         expect(subject.touch_out).to be false
       end
  
       it 'deducts the minimum fare from teh balance at touch out' do
        subject.top_up(20)
-       subject.touch_in
+       subject.touch_in(station)
        expect { subject.touch_out }.to change{ subject.balance }.by -described_class::MINIMUM_FARE
       end
+    end
+
+    describe "initialization" do 
+        it 'has a station when initailized set to nil' do
+            testclass = Oystercard.new
+            expect(testclass.entry_station).to eq nil
+        end
     end
 end
