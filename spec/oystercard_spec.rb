@@ -88,6 +88,21 @@ describe Oystercard do
         subject.touch_out
         expect(subject.in_journey?).to be false
       end
+
+      it 'returns true when an entry station exists' do
+        subject.top_up(2)
+        allow(station).to receive(:name) { "Aldgate East" }
+        subject.touch_in(station.name)
+        expect(subject.in_journey?).to be true
+      end
+      
+      it 'returns false when an entry station does not exist' do
+        subject.top_up(2)
+        allow(station).to receive(:name) { "Aldgate East" }
+        subject.touch_in(station.name)
+        subject.touch_out
+        expect(subject.in_journey?).to be false
+      end
     end
 
     describe "#touch_out" do
