@@ -1,7 +1,7 @@
 require 'station'
 
 describe Station do
-  let(:station) {Station.new(name: "Aldgate East", zone: 1)}
+  let(:station) {Station.new("Aldgate East", 1)}
 
   it 'has a name' do
     expect(station.name).to eq("Aldgate East")
