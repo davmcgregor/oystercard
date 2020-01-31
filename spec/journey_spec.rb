@@ -4,6 +4,10 @@ describe Journey do
   let(:station1) { double(:entry_station) }
   let(:station2) { double(:exit_station) }
 
+  it 'has a minimum fare' do
+    expect(Journey::MINIMUM_FARE).to eq 1
+  end
+
   describe "#fare" do
    it 'should be zero by default' do
     expect(subject.fare).to eq(0)

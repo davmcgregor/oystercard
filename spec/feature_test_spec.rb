@@ -1,3 +1,3 @@
-require 'oystercard'
+# require 'oystercard'
 
-oystercard = Oystercard.new
+# oystercard = Oystercard.new

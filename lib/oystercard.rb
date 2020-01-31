@@ -1,15 +1,12 @@
 class Oystercard
     MAXIMUM_BALANCE = 90
-    MINIMUM_FARE = 1
     
-    attr_reader :balance, :journeys
-    attr_accessor :entry_station, :exit_station
+    attr_reader :balance, :journey_list
 
-    def initialize
-        @balance = 0
-        @entry_station = nil
-        @exit_station = nil
-        @journeys = []
+    def initialize(journey_class = Journey, balance = 0)
+        @balance = balance
+        @journey_list = []
+        @journey_class = journey_class
     end
 
     def top_up(amount)
@@ -17,29 +14,40 @@ class Oystercard
         @balance += amount
     end
 
-    def deduct(amount)
-        @balance -= amount
-    end
-
     def in_journey?
-        @entry_station ? true : false
-    end
-
-    def create_journey(entry_station, exit_station)
-        journey = {"JID" => (@journeys.length + 1), :Entry => entry_station, :Exit => exit_station}
+        @current_journey
     end
 
     def touch_in(station)
-        raise "Balance not high enough for journey" if @balance < MINIMUM_FARE
-        @entry_station = station
-        in_journey?
+      deduct(@current_journey.fare) if in_journey?  
+      raise "Balance not high enough for journey" if @balance < Journey::MINIMUM_FARE
+      start_journey(station)
     end
 
-    def touch_out(exit_station)
-        @balance -= MINIMUM_FARE
-        create_journey(@entry_station, exit_station)
-        @entry_station = nil
-        @exit_station = exit_station
-        in_journey?
+    def touch_out(station)
+      finish_journey(station)
+      record_journey
+    end
+
+    private
+
+    def record_journey
+      @journey_list << @current_journey
+      @current_journey = nil
+    end
+
+    def start_journey(station)
+      @current_journey = @journey_class.new
+      @current_journey.start(station)
+    end
+
+    def finish_journey(station)
+      @current_journey = @journey_class.new unless in_journey?
+      @current_journey.finish(station)
+      deduct(@current_journey.fare)
+    end
+
+    def deduct(fare)
+      @balance -= fare
     end
 end
