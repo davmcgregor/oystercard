@@ -151,7 +151,7 @@ describe Oystercard do
 
       it 'should create a hash with teh entry and exit journey' do
         allow(station).to receive(:name).and_return("Aldgate East", "Angel")
-        expect(oyster.create_journey(station.name, station.name)).to eq({"JID"=>1, "Entry"=>"Aldgate East", "Exit"=>"Angel"})
+        expect(oyster.create_journey(station.name, station.name)).to eq({"JID"=>1, :Entry=>"Aldgate East", :Exit=>"Angel"})
       end
     end
 end

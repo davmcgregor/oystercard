@@ -3,11 +3,12 @@ class Oystercard
     MINIMUM_FARE = 1
     
     attr_reader :balance, :journeys
-    attr_accessor :entry_station
+    attr_accessor :entry_station, :exit_station
 
     def initialize
         @balance = 0
         @entry_station = nil
+        @exit_station = nil
         @journeys = []
     end
 
@@ -25,7 +26,7 @@ class Oystercard
     end
 
     def create_journey(entry_station, exit_station)
-        journey = {"JID" => (@journeys.length + 1), "Entry" => entry_station, "Exit" => exit_station}
+        journey = {"JID" => (@journeys.length + 1), :Entry => entry_station, :Exit => exit_station}
     end
 
     def touch_in(station)
@@ -36,7 +37,9 @@ class Oystercard
 
     def touch_out(exit_station)
         @balance -= MINIMUM_FARE
+        create_journey(@entry_station, exit_station)
         @entry_station = nil
+        @exit_station = exit_station
         in_journey?
     end
 end
