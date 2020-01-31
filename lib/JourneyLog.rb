@@ -22,9 +22,13 @@ class JourneyLog
     @in_journey = false
   end
 
+  def journeys
+    @journey_log.dup
+  end
+
   private
 
   def current_journey
+    return journey_log.last if in_journey?  
   end
-
 end

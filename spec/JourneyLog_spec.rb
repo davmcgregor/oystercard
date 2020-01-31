@@ -37,4 +37,12 @@ describe JourneyLog do
       end
     end
   end
+
+  describe '#journeys' do
+    it 'shoud return a copy of the journey_log array' do
+      log.start(station1)
+      log.finish(station2)
+      expect(log.journeys).to eq (log.journey_log)
+    end
+  end
 end
