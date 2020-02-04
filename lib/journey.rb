@@ -1,5 +1,3 @@
-require_relative 'oystercard'
-
 class Journey
   PENALTY_FARE = 6
   MINIMUM_FARE = 1

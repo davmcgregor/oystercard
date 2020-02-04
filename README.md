@@ -28,10 +28,39 @@ $ bundle
 
 ```Shell
 $ irb
-> require './lib/takeaway_challenge.rb'
+> require './lib/oystercard_challenge.rb'
 ```
 
 ## <a name="Feature_Tests">Feature Tests (How it works)</a>
+
+```
+> card = Oystercard.new
+> card
+ => #<Oystercard:0x00007fac7618a7c0 @balance=0, @journey_log=#<JourneyLog:0x00007fac7618a748 @in_journey=false, @journey_log=[], @journey_class=Journey>> 
+```
+Oystercards can be made an a new instance of the Oystercard class.
+```
+> entry_station = Station.new("Angel", 1)
+> exit_station = Station.new("Aldgate East", 1)
+> card.touch_in(entry_station)
+RuntimeError (Balance not high enough for journey)
+```
+Oyster cards need a minimum balance in order to make a journey.
+```
+card.top_up(50)
+=> 50 
+```
+To put money on an Oyster card use top_up and pass in a desired amount as an argument.
+```
+> card.touch_out(exit_station)
+=> 49 
+```
+Journeys will deduct fares from an Oyster card balance
+```
+> card.top_up(50)
+RuntimeError (Maximum balance of 90 exceeded)
+```
+Topping up past the maximum balance will raise an error
 
 ## <a name="Story">User Stories</a>
 
@@ -125,6 +154,17 @@ I need to have the correct fare calculated
 | .finish(station) | Sets the station as the @exit_station attribute of the journey instance & sets in_journey to false.
 | .fare | Calulates the fare based on the minimum fare, zones traveled, and if a penalty has been issued for a previous journey |
 
+## <a name="Testing">Testing</a>
+
+Tests were written with RSpec. To run the tests in terminal: 
+
+```bash
+$> cd oystercard
+$> rspec
+```
+
 ## <a name="Further_Improvements">Further Improvements</a>
 
+* Write more feature tests
+* Refactor RSpec test
 * Update README
