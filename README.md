@@ -1,14 +1,37 @@
 ### [Makers Academy](http://www.makersacademy.com) - Week 2 Pair Programming Project
 
 # Oyster card 
-[Outline](#Outline) | [Task](#Task) | [Installation Instructions](#Installation) | [Functional Description](#Functional_Description) | [Feature Tests](#Feature_Tests) | [User Stories](#Story) | [Objects & Methods](#Methods) | [Testing](#Testing) | [Further improvements](#Further_Improvements)
 
-![oystercard](oystercard.jpg)
+| [Task](#Task) | [Installation Instructions](#Installation) | [Feature Tests](#Feature_Tests) | [User Stories](#Story) | [Objects & Methods](#Methods) | [Testing](#Testing) | [Further improvements](#Further_Improvements)
 
-## <a name="Outline">Outline</a>
+![oystercard](oystercard.jpeg)
 
+## <a name="Task">Task</a>
 
-Replicate the London metro Oyster Card system based on these user stories. Each should be translated into a functional representation:
+Replicate the London metro Oyster Card system based on the below user stories. Build on the Object Oriented Programming principles used in week 1 to improve knowledge of Ruby and TDD.   
+
+This challenge is the second pair programming challenge at [Makers Academy](https://github.com/makersacademy)
+
+## <a name="Installation">Installation Instructions</a>
+
+1. Fork this repository, clone to your local machine then change into the directory:
+```
+$ git clone git@github.com:davmcgregor/oystercard.git
+$ cd oystercard
+```
+2. Load dependencies with bundle:
+```
+$ gem install bundle
+$ bundle
+```
+3. Run the app in the terminal:
+
+```Shell
+$ irb
+> require './lib/takeaway_challenge.rb'
+```
+
+## <a name="Feature_Tests">Feature Tests (How it works)</a>
 
 ## <a name="Story">User Stories</a>
 
@@ -72,6 +95,35 @@ In order to be charged the correct amount
 As a customer
 I need to have the correct fare calculated
 ```
+## <a name="Methods">Objects & Methods</a>
+
+### Oystercard
+
+| Methods | Description |
+| --- | --- |
+| OysterCard.new     | Creates a new instance of Oyster Card                                                                |
+| .top_up(amount)    | Allows the user to top up their balance by a given amount                                            |
+| .touch_in(station) | Creates a new instance of journey and stores the station as an attribute of journey within the journey log |
+| .touch_out(station)| Adds the finish station attribute to the current instance of journey and deduces the fare            |
+| .journey_history   | Displays a copy of the journey log|
+
+### JourneyLog
+
+| Methods | Description |
+| --- | --- |
+| JourneyLog.new | Creates a new instance of Journey Log |
+| .in_journey? | Returns true if the last instance of journey in the journey log has a start station and no finish station | 
+| .start(station) | Called by the 'touch_in' method on the OysterCard class. It initializes an instance of Journey and passes the station argument to it. It also sets in_journey to true. |
+|.finish(station) | Called by the 'touch_out' method on the OysterCard class. It passes the station to the last journey instance in the journey log. Also switches in_journey to false |
+| .journeys | Creates a copy of the current Journey Log and outputs it to the user |
+
+### Journey
+
+| Methods | Description |
+| --- | --- |
+| .start(station) | Sets the station as the @entry_station attribute of the journey instance & sets in_journey to true.
+| .finish(station) | Sets the station as the @exit_station attribute of the journey instance & sets in_journey to false.
+| .fare | Calulates the fare based on the minimum fare, zones traveled, and if a penalty has been issued for a previous journey |
 
 ## <a name="Further_Improvements">Further Improvements</a>
 
