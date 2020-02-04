@@ -1,6 +1,4 @@
 class JourneyLog
-  attr_reader :journey_log
-
   def initialize(journey_class = Journey)
     @in_journey = false
     @journey_log = []
